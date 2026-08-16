@@ -1,0 +1,16 @@
+{
+  "appName": "Internship Finder", "easySteps": "Easy steps", "privacy": "SIH 2026 prototype · Your details stay private in this demo.",
+  "welcome": { "scheme": "PM Internship Scheme prototype", "title": "Find an internship that fits you", "text": "Answer a few easy questions. We will show your best matches.", "start": "Start now", "time": "Takes about 2 minutes" },
+  "nav": { "back": "Back", "nextSkills": "Next: My skills", "nextLocation": "Next: Location", "changeChoices": "Change my choices", "details": "View details", "find": "Find my internships", "retry": "Try again", "updateChoices": "Update my choices", "backResults": "Back to internships" },
+  "progress": { "step": "Step {{current}} of 4", "education": "Your education", "skills": "Your skills", "interest": "Your interests", "preferences": "Your preferences" },
+  "profile": { "start": "Let’s start", "educationTitle": "Tell us about your education", "chooseFit": "Choose what fits you best.", "course": "Your course", "subject": "Your subject", "chooseSubject": "Choose your subject" },
+  "skills": { "title": "What skills do you have?", "instruction": "Choose all that you know." },
+  "interests": { "title": "What type of work interests you?", "instruction": "Choose one or more." },
+  "location": { "title": "Where would you like to work?", "instruction": "Choose places that work for you.", "state": "Choose a state", "many": "You can choose more than one.", "city": "Choose a city", "optional": "optional", "workStyle": "Work style", "duration": "How long?", "months": "{{count}} months" },
+  "results": { "heading": "Internships for you", "label": "Your best matches", "instruction": "Here are up to five internships that fit your choices.", "noneTitle": "No internships found yet", "noneText": "Try choosing more skills, interests, or states.", "loadingTitle": "Finding internships for you", "loadingText": "Please wait a moment." },
+  "card": { "match": "{{percentage}}% match", "perMonth": "/ month", "months": "{{count}} months" },
+  "details": { "about": "About this internship", "skills": "Skills needed", "apply": "Who can apply" },
+  "error": { "title": "We could not find internships now", "network": "Please check your internet and try again.", "educationRequired": "Choose your course.", "branchRequired": "Choose your subject.", "skillsRequired": "Choose at least one skill.", "interestsRequired": "Choose at least one work interest.", "durationRequired": "Choose an internship duration." },
+  "reasons": { "skills": "Strong match because you know {{skills}}.", "interest": "Matches your interest in {{sector}}.", "state": "Available in your preferred state.", "city": "Available in your preferred city.", "duration": "Matches your preferred internship duration.", "general": "Suitable based on your education profile and internship preferences." },
+  "modes": { "On-site": "On-site", "Hybrid": "Hybrid", "Remote": "Remote" }
+}

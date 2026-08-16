@@ -1,0 +1,12 @@
+metric,value
+candidate_count,1200.0000
+precision_at_3,0.8675
+precision_at_5,0.8420
+recall_at_5,0.1170
+ground_truth_label_coverage,0.8883
+skill_match_accuracy,0.9531
+eligibility_accuracy,1.0000
+location_match_accuracy,0.8537
+recommendation_diversity,0.7004
+average_recommendation_score,0.6053
+candidates_with_3_eligible_recommendations,0.8883

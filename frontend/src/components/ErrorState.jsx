@@ -1,0 +1,2 @@
+import { useTranslation } from 'react-i18next'
+export default function ErrorState({ onRetry, message }) { const { t } = useTranslation(); return <div className="panel mx-auto max-w-md text-center" role="alert"><div className="text-4xl">!</div><h2 className="mt-3 text-xl font-extrabold text-navy">{t('error.title')}</h2><p className="mt-2 text-slate-600">{message || t('error.network')}</p><button onClick={onRetry} className="primary-button mt-6">{t('nav.retry')}</button></div> }

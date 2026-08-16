@@ -1,0 +1,2 @@
+import { useTranslation } from 'react-i18next'
+export default function LoadingState() { const { t } = useTranslation(); return <div className="panel mx-auto max-w-md text-center" role="status"><div className="mx-auto h-12 w-12 animate-pulse rounded-full bg-saffron" /><h2 className="mt-5 text-xl font-extrabold text-navy">{t('results.loadingTitle')}</h2><p className="mt-2 text-slate-600">{t('results.loadingText')}</p></div> }
