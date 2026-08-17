@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 
 from .config import settings
 from .database import initialize_database
-from .routes import candidates, health, internships, recommendations
+from .routes import candidates, health, internships, recommendations, auth
 
 logging.basicConfig(level=settings.log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -43,4 +43,5 @@ app.include_router(candidates.router)
 app.include_router(recommendations.router)
 app.include_router(internships.router)
 app.include_router(health.router)
+app.include_router(auth.router)
 

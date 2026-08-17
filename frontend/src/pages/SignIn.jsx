@@ -1,15 +1,46 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { registerAPI } from '../services/api'
 
 export default function SignIn() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isRegister, setIsRegister] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
 
-  const handleSignIn = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // For the prototype, we simply redirect to the profile creation matching step
-    navigate('/profile')
+    setErrorMsg('')
+    setSuccessMsg('')
+    
+    if (isRegister) {
+      if (!email.includes('@')) {
+        setErrorMsg(t('signin.invalid_email', { defaultValue: 'Invalid email' }))
+        return
+      }
+      try {
+        await registerAPI({ email, password })
+        setSuccessMsg(t('signin.success', { defaultValue: 'Account created successfully' }))
+        setTimeout(() => setIsRegister(false), 2000)
+      } catch (err) {
+        if (err.response && err.response.status === 409) {
+          setErrorMsg(t('signin.account_exists', { defaultValue: 'Account already exists' }))
+        } else if (err.response && err.response.status === 422) {
+          setErrorMsg(t('signin.invalid_email', { defaultValue: 'Invalid email' }))
+        } else if (err.message && err.message.toLowerCase().includes('network')) {
+          setErrorMsg(t('signin.network_error', { defaultValue: 'Network error' }))
+        } else {
+          setErrorMsg(t('signin.server_error', { defaultValue: 'Unable to create account' }))
+        }
+      }
+    } else {
+      // For the prototype, we simply redirect to the profile creation matching step
+      navigate('/profile')
+    }
   }
 
   return (
@@ -22,19 +53,21 @@ export default function SignIn() {
             </svg>
           </div>
           <h2 className="mt-8 text-center text-3xl font-extrabold tracking-tight text-[#0B1527]">
-            Sign in
+            {isRegister ? t('signin.create_account', { defaultValue: 'Create Account' }) : t('signin.signin')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
+            {t('signin.or')}{' '}
             <Link to="/" className="font-medium text-[#2349B8] hover:text-blue-800 transition-colors">
-              return to home
+              {t('nav.home') || 'return to home'}
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSignIn}>
+        {errorMsg && <div className="mt-2 text-center text-sm font-medium text-red-600">{errorMsg}</div>}
+        {successMsg && <div className="mt-2 text-center text-sm font-medium text-green-600">{successMsg}</div>}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4 rounded-md">
             <div>
-              <label htmlFor="email-address" className="sr-only">Email address</label>
+              <label htmlFor="email-address" className="sr-only">{t('signin.email')}</label>
               <input
                 id="email-address"
                 name="email"
@@ -42,13 +75,13 @@ export default function SignIn() {
                 autoComplete="email"
                 required
                 className="relative block w-full appearance-none rounded-xl border border-gray-300 px-4 py-3.5 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-[#2349B8] focus:outline-none focus:ring-1 focus:ring-[#2349B8] sm:text-sm transition-shadow"
-                placeholder="Email address"
+                placeholder={t('signin.email')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">Password</label>
+              <label htmlFor="password" className="sr-only">{t('signin.password')}</label>
               <input
                 id="password"
                 name="password"
@@ -56,47 +89,57 @@ export default function SignIn() {
                 autoComplete="current-password"
                 required
                 className="relative block w-full appearance-none rounded-xl border border-gray-300 px-4 py-3.5 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-[#2349B8] focus:outline-none focus:ring-1 focus:ring-[#2349B8] sm:text-sm transition-shadow"
-                placeholder="Password"
+                placeholder={t('signin.password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-[#2349B8] focus:ring-[#2349B8]"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
-                Remember me
-              </label>
-            </div>
+          {!isRegister && (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-[#2349B8] focus:ring-[#2349B8]"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
+                  {t('signin.remember')}
+                </label>
+              </div>
 
-            <div className="text-sm">
-              <a href="#" className="font-medium text-[#2349B8] hover:text-blue-800 transition-colors">
-                Forgot your password?
-              </a>
+              <div className="text-sm">
+                <a href="#" className="font-medium text-[#2349B8] hover:text-blue-800 transition-colors">
+                  {t('signin.forgot')}
+                </a>
+              </div>
             </div>
-          </div>
+          )}
 
           <div>
             <button
               type="submit"
               className="group relative flex w-full justify-center rounded-xl border border-transparent bg-[#2349B8] px-4 py-3.5 text-sm font-bold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-[#2349B8] focus:ring-offset-2 transition-all shadow-md shadow-blue-200"
             >
-              Sign in
+              {isRegister ? t('signin.register_button', { defaultValue: 'Register' }) : t('signin.signin')}
             </button>
           </div>
           
           <div className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <a href="#" className="font-semibold text-[#2349B8] hover:text-blue-800 transition-colors">
-              Create account
-            </a>
+            {isRegister ? (
+              <button type="button" onClick={() => { setIsRegister(false); setErrorMsg(''); setSuccessMsg(''); }} className="font-semibold text-[#2349B8] hover:text-blue-800 transition-colors">
+                {t('signin.back_to_login', { defaultValue: 'Back to Sign In' })}
+              </button>
+            ) : (
+              <>
+                {t('signin.no_account')}{' '}
+                <button type="button" onClick={() => { setIsRegister(true); setErrorMsg(''); setSuccessMsg(''); }} className="font-semibold text-[#2349B8] hover:text-blue-800 transition-colors">
+                  {t('signin.create')}
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>
