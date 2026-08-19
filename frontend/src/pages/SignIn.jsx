@@ -1,27 +1,33 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { registerAPI } from '../services/api'
+import { registerAPI, loginAPI } from '../services/api'
+import { useProfile } from '../context/ProfileContext'
 
 export default function SignIn() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { loginUser } = useProfile()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
     setSuccessMsg('')
     
+    if (!email.includes('@')) {
+      setErrorMsg(t('signin.invalid_email', { defaultValue: 'Invalid email' }))
+      return
+    }
+
+    setLoading(true)
+
     if (isRegister) {
-      if (!email.includes('@')) {
-        setErrorMsg(t('signin.invalid_email', { defaultValue: 'Invalid email' }))
-        return
-      }
       try {
         await registerAPI({ email, password })
         setSuccessMsg(t('signin.success', { defaultValue: 'Account created successfully' }))
@@ -38,9 +44,24 @@ export default function SignIn() {
         }
       }
     } else {
-      // For the prototype, we simply redirect to the profile creation matching step
-      navigate('/profile')
+      try {
+        const data = await loginAPI({ email, password })
+        loginUser({ user_id: data.user_id, email: data.email })
+        setSuccessMsg(t('signin.login_success', { defaultValue: 'Logged in successfully!' }))
+        setTimeout(() => navigate('/profile'), 800)
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          setErrorMsg(t('signin.no_account_found', { defaultValue: 'Account does not exist. Please create an account first.' }))
+        } else if (err.response && err.response.status === 401) {
+          setErrorMsg(t('signin.wrong_password', { defaultValue: 'Incorrect password. Please try again.' }))
+        } else if (err.message && err.message.toLowerCase().includes('network')) {
+          setErrorMsg(t('signin.network_error', { defaultValue: 'Network error' }))
+        } else {
+          setErrorMsg(t('signin.server_error', { defaultValue: 'Server error' }))
+        }
+      }
     }
+    setLoading(false)
   }
 
   return (
@@ -121,9 +142,10 @@ export default function SignIn() {
           <div>
             <button
               type="submit"
-              className="group relative flex w-full justify-center rounded-xl border border-transparent bg-[#2349B8] px-4 py-3.5 text-sm font-bold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-[#2349B8] focus:ring-offset-2 transition-all shadow-md shadow-blue-200"
+              disabled={loading}
+              className="group relative flex w-full justify-center rounded-xl border border-transparent bg-[#2349B8] px-4 py-3.5 text-sm font-bold text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-[#2349B8] focus:ring-offset-2 transition-all shadow-md shadow-blue-200 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {isRegister ? t('signin.register_button', { defaultValue: 'Register' }) : t('signin.signin')}
+              {loading ? '...' : isRegister ? t('signin.register_button', { defaultValue: 'Register' }) : t('signin.signin')}
             </button>
           </div>
           

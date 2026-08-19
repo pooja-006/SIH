@@ -1,8 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useProfile } from '../context/ProfileContext'
 
 export default function Welcome() {
   const { t, i18n } = useTranslation()
+  const { user } = useProfile()
+  const navigate = useNavigate()
+
+  const handleStartNow = () => {
+    if (user) {
+      navigate('/profile')
+    } else {
+      navigate('/signin')
+    }
+  }
   
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -25,9 +36,9 @@ export default function Welcome() {
           </p>
           
           <div className="flex flex-wrap items-center gap-4 mb-14">
-            <Link to="/profile" className="inline-flex h-12 items-center justify-center rounded-full bg-[#2349B8] px-8 font-semibold text-white hover:bg-blue-800 transition-colors">
+            <button onClick={handleStartNow} className="inline-flex h-12 items-center justify-center rounded-full bg-[#2349B8] px-8 font-semibold text-white hover:bg-blue-800 transition-colors cursor-pointer">
               {t('welcome.start')} <span className="ml-2">→</span>
-            </Link>
+            </button>
             <Link to="/signin" className="inline-flex h-12 items-center justify-center rounded-full border border-gray-300 bg-white px-8 font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
               {t('signin.signin')}
             </Link>

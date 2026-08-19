@@ -16,7 +16,7 @@ export default function SkillsInterests() {
         <h1 className="text-2xl font-extrabold text-navy sm:text-3xl">{t('skills.title')}</h1>
         <p className="mt-2 text-slate-600">{t('skills.instruction')}</p>
         <div className="mt-5">
-          <SkillSelector selected={profile.skills} onChange={(skills) => updateProfile({ skills })} />
+          <SkillSelector selected={profile.skills} branch={profile.branch} onChange={(skills) => updateProfile({ skills })} />
         </div>
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           <button className="secondary-button" onClick={() => navigate('/profile')}>{t('nav.back')}</button>

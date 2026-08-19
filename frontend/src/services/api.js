@@ -27,6 +27,7 @@ export function profilePayload(profile) {
 
 export const submitCandidate = (profile) => api.post('/candidates', profilePayload(profile)).then((response) => response.data)
 export const registerAPI = (user) => api.post('/register', user).then((response) => response.data)
+export const loginAPI = (user) => api.post('/login', user).then((response) => response.data)
 export const fetchSectors = () => api.get('/sectors').then((response) => response.data.values)
 export const fetchStates = () => api.get('/states').then((response) => response.data.values)
 export const fetchRecommendations = (profile) => api.post('/recommendations', profilePayload(profile)).then((response) => response.data)
