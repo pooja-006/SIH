@@ -1,7 +1,7 @@
 import ProgressSteps from './ProgressSteps'
 import { useTranslation } from 'react-i18next'
 
-const educationOptions = ['Diploma', 'B.Tech', 'BCA', 'B.Sc.', 'B.Com', 'BBA', 'BA', 'MBA']
+const educationOptions = ['10th', '12th', 'Diploma', 'B.Tech', 'BCA', 'B.Sc.', 'B.Com', 'BBA', 'BA', 'MBA']
 const branchOptions = ['Computer Science', 'Information Technology', 'Data Science', 'Mechanical Engineering', 'Electronics and Communication', 'Electrical Engineering', 'Commerce', 'Business Administration', 'Agriculture', 'Civil Engineering', 'Public Administration', 'Social Work', 'Nursing', 'Tourism']
 
 export default function CandidateForm({ profile, onChange, onNext }) {
